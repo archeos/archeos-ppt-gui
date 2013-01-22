@@ -1,0 +1,20 @@
+Source: ppt-gui
+Maintainer: Alessendro Bezzi <alessandro.bezzi@arcteam.com>
+uploaders: Luca Bezzi <luca.bezzi@arcteam.com>, Romain Janvier <romain.janvier@hotmail.fr> 
+Section: photogrammetry
+Priority: optional
+Standards-Version: 3.9.4
+Build-Depends: python, debhelper (>= 9.0.0)
+X-Python-Version: >= 2.7
+Homepage: http://www.archeos.eu
+Vcs-Git: git://github.com/archeos/archeos-ppt-gui.git
+Vcs-Browser: https://github.com/archeos/archeos-ppt-gui/
+
+
+Package: ppt-gui
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, ppt (>= 0.1), python-qt4 (>=4.9.3)
+Description: Simple GUI for Python Photogrammetry Toolbox
+ This gui helps you to run Bundler, CMVS, PMVS in a graphical
+ environment. It's based on Python and PyQt4.
+

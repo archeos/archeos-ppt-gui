@@ -1,0 +1,6 @@
+debian/ppt-gui.desktop /usr/share/applications
+debian/icons/64x64/ppt_icon.png /usr/share/icons/hicolor/64x64/apps
+debian/icons/48x48/ppt_icon.png /usr/share/icons/hicolor/48x48/apps
+
+
+

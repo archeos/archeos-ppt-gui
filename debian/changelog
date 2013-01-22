@@ -1,0 +1,38 @@
+ppt-gui (0.1+nmu1) theodoric; urgency=low
+  * Non-maintainer upload 
+  * Initial theodoric release
+  * Converted to 3.0 (native) source package
+  * (hopefully) Better organisation of code
+  * Added a short distutils file (setup.py)
+
+ -- Romain Janvier <romain.janvier@hotmail.com>  Tue, 22 Jan 2013 12:05:31 +0100
+
+ppt-gui (0.1-0archeos5) caesar; urgency=low
+  
+  * Added check-camera-database function
+
+ -- Alessendro Bezzi <alessandro.bezzi@arcteam.com>  Tue, 22 Jan 2013 12:04:31 +0100
+
+ppt-gui (0.1-0archeos4) caesar; urgency=low
+  
+  * Fixed Icon: entry in desktop file
+
+ -- Alessendro Bezzi <alessandro.bezzi@arcteam.com>  Tue, 22 Jan 2013 12:04:31 +0100
+
+ppt-gui (0.1-0archeos3) caesar; urgency=low
+  
+  * Changed /usr/share/application/ to /usr/share/applications/
+
+ -- Alessendro Bezzi <alessandro.bezzi@arcteam.com>  Tue, 22 Jan 2013 12:04:31 +0100
+
+ppt-gui (0.1-0archeos2) caesar; urgency=low
+  
+  * Added changelog
+ 
+ -- Alessendro Bezzi <alessandro.bezzi@arcteam.com>  Tue, 22 Jan 2013 12:04:31 +0100
+
+ppt-gui (0.1-0archeos1) caesar; urgency=low
+  
+  * Initial release
+ 
+ -- Alessendro Bezzi <alessandro.bezzi@arcteam.com>  Tue, 22 Jan 2013 12:04:31 +0100

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Categories=Photogrammetry;
+Exec=ppt-gui
+GenericName=Python Photogrammetry Toolbox
+Hidden=false
+Icon=ppt_icon
+Name=Python Photogrammetry Toolbox
+NoDisplay=false
+StartupNotify=true
+Terminal=1
+TryExec=ppt-gui
+Type=Application
+Version=0.1
+Name[en_GB]=ppt-gui
