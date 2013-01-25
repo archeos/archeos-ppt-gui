@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
-
 import subprocess
 
 from PyQt4 import QtGui
 from PyQt4 import QtCore
-
+from PyQt4.QtCore import QProcess, QString
 
 class PPTGUI(QtGui.QWidget):
     """ The main Widget
     TODO: PEP8
     TODO: Translations
-    TODO: modularizzation (tab must live in a separate class)
+    TODO: modularizzation and DRY 
+        - Tabs class subclass QTabwidget
+        - They include a 'console' (i.e. a QtTextBrowser)(?)
+        - A QTframe
+        - A command-line arg = QtLineEdit
+        - BUT ALSO QProcess slots ? 
     """
     def __init__(self):
         super(PPTGUI, self).__init__()
@@ -19,7 +23,8 @@ class PPTGUI(QtGui.QWidget):
         self.setGeometry(300, 300, 900, 580)
         self.setWindowIcon(QtGui.QIcon('gui/assets/icons/python_icon.png'))
         ####################################################################       
-
+        # EXTERNAL PROCESS
+        self.proc = QProcess()
         self.tabWidget = QtGui.QTabWidget(self)
         self.tabWidget.setGeometry(QtCore.QRect(0, 0, 900, 580))
         self.tabWidget.setObjectName("tabWidget")
@@ -50,7 +55,7 @@ class PPTGUI(QtGui.QWidget):
         self.button1.move(20, 30)
         self.connect(self.button1, QtCore.SIGNAL('clicked()'), self.showDialog1)
         self.setFocus()
-
+      
         # directory path label
         self.label9 = QtGui.QLabel('path:', self.tab)
         self.label9.move(190, 34)
@@ -391,13 +396,6 @@ class PPTGUI(QtGui.QWidget):
         self.cb1.setChecked(False)
         self.text2.setText("RunBundler --photos=" + self.text4.displayText() + " --featureExtractor=" + self.text15.displayText()+ " --photoScalingFactor=" + self.text11.displayText())
 
-    # start bundler
-    def startbundler(self):
-        command = self.text2.displayText()
-        proc = subprocess.Popen((str(command)), shell=True, stdout=subprocess.PIPE)
-        output = proc.stdout.read()
-        self.output1.append(str(output))
-
     # help button 1 - select directory
     def on_help1_clicked(self):
 		QtGui.QMessageBox.information(self, "Help!", "Select the directory with original photos. Pictures have to be in JPG file format.", QtGui.QMessageBox.Ok)
@@ -456,14 +454,7 @@ class PPTGUI(QtGui.QWidget):
     # help button 6 - cluster
     def on_help6_clicked(self):
 		QtGui.QMessageBox.information(self, "Help!", "Select the max number of photos for each cluster that CMVS should compute. Separated PLY output files will be created. \n\nDepends on the CPUs of your computer: if infinite loop occur, stop the process and try a different value. \n\nDefault value is 10: an image set with 28 photos will be compute in 3 separated clusters.", QtGui.QMessageBox.Ok)
-            
-    # start cmvs
-    def startcmvs(self):
-        command = self.text6.displayText()
-        proc = subprocess.Popen((str(command)), shell=True, stdout=subprocess.PIPE)
-        output = proc.stdout.read()
-        self.output2.append(str(output))
-
+       
     # open pmvs 
     def openpmvs(self, text):      
         if self.cb3.isChecked():
@@ -483,14 +474,66 @@ class PPTGUI(QtGui.QWidget):
     # connection path-command
     def onChangedpathpmvs(self, text):
         self.text8.setText("RunPMVS --bundlerOutputPath=" + self.text7.displayText())
+    
+    # QPROCESS slots
+    # Multiple slots for the same thing
+    # This is a violatation of the DRY principle / Only for test now 
+    # Proper solution is to use heritage (QtTab... see docstring)
+    
+    # on_start should toggle "Run" Button to "Cancel" and block access to
+    # others tabs?
+    # on_finish/on_error, invert toggle
+    def on_bundler_start(self):
+        self.output1.append("Process has started...")
+ 
+    def on_cmvs_start(self):
+        self.output2.append("Process has started...")
 
-    # start pmvs
+    def on_pmvs_start(self):
+        self.output3.append("Process has started...")
+    
+    def on_bundler_out(self):
+        self.output1.append(QtCore.QString(self.proc.readAllStandardOutput()))
+
+    def on_cmvs_out(self):
+        self.output2.append(QtCore.QString(self.proc.readAllStandardOutput()))
+
+    def on_pmvs_out(self):
+        self.output3.append(QtCore.QString(self.proc.readAllStandardOutput()))
+    
+    # Start bundler
+    def startbundler(self):
+        command = self.text2.displayText()
+        self.proc.connect(self.proc,
+                QtCore.SIGNAL("started()"),
+                self.on_bundler_start) 
+        self.proc.connect(self.proc, 
+                QtCore.SIGNAL("readyReadStandardOutput()"),
+                self.on_bundler_out)
+        self.proc.start(command)
+       
+    # Start cmvs
+    def startcmvs(self):
+        command = self.text6.displayText()
+        self.proc.connect(self.proc,
+                QtCore.SIGNAL("started()"),
+                self.on_cmvs_start) 
+        self.proc.connect(self.proc, 
+				QtCore.SIGNAL("readyReadStandardOutput()"),
+                self.on_cmvs_out)
+        self.proc.start(command)
+ 
+    # Start pmvs
     def startpmvs(self):
         command = self.text8.displayText()
-        proc = subprocess.Popen((str(command)), shell=True, stdout=subprocess.PIPE)
-        output = proc.stdout.read()
-        self.output3.append(str(output))
-	
+        self.proc.connect(self.proc,
+                QtCore.SIGNAL("started()"),
+                self.on_pmvs_start) 
+        self.proc.connect(self.proc, 
+				QtCore.SIGNAL("readyReadStandardOutput()"),
+                self.on_pmvs_out)
+        self.proc.start(command)
+ 
     # select directory with photos (Camera Database)
     def showDialog4(self):
         directoryname = QtGui.QFileDialog.getExistingDirectory(self, 'Open directory with photos', '/home')
