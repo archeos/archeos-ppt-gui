@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-import subprocess
-
 from PyQt4 import QtGui
+from PyQt4.QtGui import QWidget, QDialog
 from PyQt4 import QtCore
 from PyQt4.QtCore import QProcess
 
@@ -18,11 +17,19 @@ procP.setProcessChannelMode(QProcess.MergedChannels)
 procCam = QProcess()
 procCam.setProcessChannelMode(QProcess.MergedChannels)
 
-class PPTGUI(QtGui.QWidget):
+class CameraDialog(QDialog):
+    """Simple Dialog to handle the camera database
+    input
+    """
+    def __init__(self, parent, ):
+        """docstring for __init__"""
+        pass
+
+class PPTGUI(QWidget):
     """ The main Widget
     TODO: PEP8
     TODO: Translations
-    TODO: modularizzation and DRY 
+    TODO: modularisation and DRY 
         - Tabs class subclass QTabwidget
         - They include a 'console' (i.e. a QtTextBrowser)(?)
         - A QTframe
@@ -513,7 +520,10 @@ class PPTGUI(QtGui.QWidget):
 
     def on_pmvs_start(self):
         self.output3.insertHtml("<h4>Process has started...</h4><br>")
-    
+
+    def on_cam_start(self):
+        self.output4.insertHtml("<h4>Process has started...</h4><br>")
+ 
     def on_bundler_out(self):
          self.output1.insertHtml(self.format_out(procB.readAllStandardOutput()))
 
@@ -522,7 +532,14 @@ class PPTGUI(QtGui.QWidget):
 
     def on_pmvs_out(self):
         self.output3.insertHtml(self.format_out(procP.readAllStandardOutput()))
-    
+
+    def on_cam_out(self):
+        out = unicode(procCam.readAllStandardOutput())
+        if out.startswith("Type CCD width"):
+            dial = QDialog(self)
+            dial.exec_()
+        self.output4.insertHtml(self.format_out(out))
+ 
     def on_bundler_finish(self, status):
         self.output1.insertHtml("<h4>Process is finished!</h4><br><br")
 
@@ -531,6 +548,9 @@ class PPTGUI(QtGui.QWidget):
 
     def on_pmvs_finish(self, status):
         self.output3.insertHtml("<h4>Process is finished!</h4><br><br>")
+
+    def on_cam_finish(self, status):
+        self.output4.insertHtml("<h4>Check is finished!</h4><br><br>")
 
     def kill_bundler_process(self):
         """ killing the process that's already running 
@@ -596,17 +616,17 @@ class PPTGUI(QtGui.QWidget):
         # WE don't have to check the sate of the process
         # before killing it, because it doesn't raise
         # any exception.
-        procP.terminate()
-        procP.kill() 
+        procCam.terminate()
+        procCam.kill() 
         # Need to disconnect to avoid multiple
         # start/ finish msg
-        procP.disconnect(procP, 
+        procCam.disconnect(procCam, 
                 QtCore.SIGNAL("started()"),
-                self.on_pmvs_start)
-        procP.waitForFinished()
-        procP.disconnect(procP, 
+                self.on_cam_start)
+        procCam.waitForFinished()
+        procCam.disconnect(procCam, 
                 QtCore.SIGNAL("finished(int)"),
-                self.on_pmvs_finish)
+                self.on_cam_finish)
  
     # Start bundler
     def startbundler(self):
@@ -674,8 +694,7 @@ class PPTGUI(QtGui.QWidget):
 
 # start Camera Database
     def startcamdat(self):
-        if procCam.state() == QProcess.Running:
-            self.kill_cam_process()
+        self.kill_cam_process()
         command = self.text10.displayText()
         procCam.connect(procCam,
                 QtCore.SIGNAL("started()"),
@@ -683,7 +702,7 @@ class PPTGUI(QtGui.QWidget):
         procCam.connect(procCam, 
                 QtCore.SIGNAL("finished(int)"),
                 self.on_cam_finish) 
-        procCam.connect(procP, 
+        procCam.connect(procCam, 
 				QtCore.SIGNAL("readyReadStandardOutput()"),
                 self.on_cam_out)
         procCam.start(command)
