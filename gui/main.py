@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from PyQt4 import QtGui
-from PyQt4.QtGui import QWidget, QDialog
+from PyQt4.QtGui import QWidget, QInputDialog
 from PyQt4 import QtCore
 from PyQt4.QtCore import QProcess
 
@@ -16,15 +16,6 @@ procP = QProcess()
 procP.setProcessChannelMode(QProcess.MergedChannels)
 procCam = QProcess()
 procCam.setProcessChannelMode(QProcess.MergedChannels)
-
-class CameraDialog(QWidget):
-    """Simple Dialog to handle the camera database
-    input
-    """
-    def __init__(self, parent, ):
-        """docstring for __init__"""
-        super(PPTGUI, self).__init__()
-
 
 class PPTGUI(QWidget):
     """ The main Widget
@@ -537,12 +528,17 @@ class PPTGUI(QWidget):
     def on_cam_out(self):
         out = unicode(procCam.readAllStandardOutput())
         if out.startswith("Type CCD width"):
-            dial = QDialog(self)
-            dial.exec_()
-        self.output4.insertHtml(self.format_out(out))
+           label = out.split(".")[0]
+           ccd = list(QInputDialog.getDouble (self, 
+               "CCD width", label, 
+               0, 0, 3000, 1))
+           arg = unicode(ccd[0]) + u"\n" if ccd[1] and ccd[0] != 0.0 else u"\n"
+           procCam.write(arg)
+        else:
+            self.output4.insertHtml(self.format_out(out))
  
     def on_bundler_finish(self, status):
-        self.output1.insertHtml("<h4>Process is finished!</h4><br><br")
+        self.output1.insertHtml("<h4>Process is finished!</h4><br><br>")
 
     def on_cmvs_finish(self, status):
         self.output2.insertHtml("<h4>Process is finished!</h4><br><br>")
@@ -551,6 +547,7 @@ class PPTGUI(QWidget):
         self.output3.insertHtml("<h4>Process is finished!</h4><br><br>")
 
     def on_cam_finish(self, status):
+
         self.output4.insertHtml("<h4>Check is finished!</h4><br><br>")
 
     def kill_bundler_process(self):
