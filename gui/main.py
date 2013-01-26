@@ -3,7 +3,20 @@ import subprocess
 
 from PyQt4 import QtGui
 from PyQt4 import QtCore
-from PyQt4.QtCore import QProcess, QString
+from PyQt4.QtCore import QProcess
+
+#Global processes to avoid weird behaviors (sic)
+procB = QProcess()
+# Interleave stdout and stderr, we need to do that because
+# CMVS write in stderr (?) and a proper and separate error handling 
+# is impossible
+procB.setProcessChannelMode(QProcess.MergedChannels)
+procC = QProcess()
+procC.setProcessChannelMode(QProcess.MergedChannels)
+procP = QProcess()
+procP.setProcessChannelMode(QProcess.MergedChannels)
+procCam = QProcess()
+procCam.setProcessChannelMode(QProcess.MergedChannels)
 
 class PPTGUI(QtGui.QWidget):
     """ The main Widget
@@ -22,9 +35,7 @@ class PPTGUI(QtGui.QWidget):
         self.setWindowTitle('Python Photogrammetry Toolbox GUI v. 0.1')
         self.setGeometry(300, 300, 900, 580)
         self.setWindowIcon(QtGui.QIcon('gui/assets/icons/python_icon.png'))
-        ####################################################################       
-        # EXTERNAL PROCESS
-        self.proc = QProcess()
+          ####################################################################       
         self.tabWidget = QtGui.QTabWidget(self)
         self.tabWidget.setGeometry(QtCore.QRect(0, 0, 900, 580))
         self.tabWidget.setObjectName("tabWidget")
@@ -474,8 +485,18 @@ class PPTGUI(QtGui.QWidget):
     # connection path-command
     def onChangedpathpmvs(self, text):
         self.text8.setText("RunPMVS --bundlerOutputPath=" + self.text7.displayText())
+        
+    #format text functions
+    def format_out(self, array):
+        """ Format standard output as Html """
+        return unicode(array).replace("\n", "<br>")
+   
+    def format_err(self, array):
+        """Format standard error message as Html"""
+        return "<span style='color: red'>" + unicode(array).replace("\n",
+                "<br>") + "</span>"
     
-    # QPROCESS slots
+    # QPROCESS signals
     # Multiple slots for the same thing
     # This is a violatation of the DRY principle / Only for test now 
     # Proper solution is to use heritage (QtTab... see docstring)
@@ -483,56 +504,160 @@ class PPTGUI(QtGui.QWidget):
     # on_start should toggle "Run" Button to "Cancel" and block access to
     # others tabs?
     # on_finish/on_error, invert toggle
+     
     def on_bundler_start(self):
-        self.output1.append("Process has started...")
+        self.output1.insertHtml("<h4>Process has started...</h4><br>")
  
     def on_cmvs_start(self):
-        self.output2.append("Process has started...")
+        self.output2.insertHtml("<h4>Process has started...</h4><br>")
 
     def on_pmvs_start(self):
-        self.output3.append("Process has started...")
+        self.output3.insertHtml("<h4>Process has started...</h4><br>")
     
     def on_bundler_out(self):
-        self.output1.append(QtCore.QString(self.proc.readAllStandardOutput()))
+         self.output1.insertHtml(self.format_out(procB.readAllStandardOutput()))
 
     def on_cmvs_out(self):
-        self.output2.append(QtCore.QString(self.proc.readAllStandardOutput()))
+        self.output2.insertHtml(self.format_out(procC.readAllStandardOutput()))
 
     def on_pmvs_out(self):
-        self.output3.append(QtCore.QString(self.proc.readAllStandardOutput()))
+        self.output3.insertHtml(self.format_out(procP.readAllStandardOutput()))
     
+    def on_bundler_finish(self, status):
+        self.output1.insertHtml("<h4>Process is finished!</h4><br><br")
+
+    def on_cmvs_finish(self, status):
+        self.output2.insertHtml("<h4>Process is finished!</h4><br><br>")
+
+    def on_pmvs_finish(self, status):
+        self.output3.insertHtml("<h4>Process is finished!</h4><br><br>")
+
+    def kill_bundler_process(self):
+        """ killing the process that's already running 
+        in the 'same tab' before launching a new one 
+        """
+        # WE don't have to check the sate of the process
+        # before killing it, because it doesn't raise
+        # any exception.
+        procB.terminate()
+        procB.kill() 
+        # Need to disconnect to avoid multiple
+        # start/ finish msg
+        procB.disconnect(procB, 
+                QtCore.SIGNAL("started()"),
+                self.on_bundler_start)
+        procB.waitForFinished()
+        procB.disconnect(procB, 
+                QtCore.SIGNAL("finished(int)"),
+                self.on_bundler_finish)
+   
+    def kill_cmvs_process(self):
+        """ killing the process that's already running 
+        in the 'same tab' before launching a new one 
+        """
+        # WE don't have to check the sate of the process
+        # before killing it, because it doesn't raise
+        # any exception.
+        procC.terminate()
+        procC.kill() 
+        # Need to disconnect to avoid multiple
+        # start/ finish msg
+        procC.disconnect(procC, 
+                QtCore.SIGNAL("started()"),
+                self.on_cmvs_start)
+        procC.waitForFinished()
+        procC.disconnect(procC, 
+                QtCore.SIGNAL("finished(int)"),
+                self.on_cmvs_finish)
+   
+    def kill_pmvs_process(self):
+        """ killing the process that's already running 
+        in the 'same tab' before launching a new one 
+        """
+        # WE don't have to check the sate of the process
+        # before killing it, because it doesn't raise
+        # any exception.
+        procP.terminate()
+        procP.kill() 
+        # Need to disconnect to avoid multiple
+        # start/ finish msg
+        procP.disconnect(procP, 
+                QtCore.SIGNAL("started()"),
+                self.on_pmvs_start)
+        procP.waitForFinished()
+        procP.disconnect(procP, 
+                QtCore.SIGNAL("finished(int)"),
+                self.on_pmvs_finish)
+
+    def kill_cam_process(self):
+        """ killing the process that's already running 
+        in the 'same tab' before launching a new one 
+        """
+        # WE don't have to check the sate of the process
+        # before killing it, because it doesn't raise
+        # any exception.
+        procP.terminate()
+        procP.kill() 
+        # Need to disconnect to avoid multiple
+        # start/ finish msg
+        procP.disconnect(procP, 
+                QtCore.SIGNAL("started()"),
+                self.on_pmvs_start)
+        procP.waitForFinished()
+        procP.disconnect(procP, 
+                QtCore.SIGNAL("finished(int)"),
+                self.on_pmvs_finish)
+ 
     # Start bundler
     def startbundler(self):
+        if procB.state() == QProcess.Running:
+            self.kill_bundler_process() 
         command = self.text2.displayText()
-        self.proc.connect(self.proc,
+        procB.connect(procB,
                 QtCore.SIGNAL("started()"),
                 self.on_bundler_start) 
-        self.proc.connect(self.proc, 
+        procB.connect(procB, 
+                QtCore.SIGNAL("finished(int)"),
+                self.on_bundler_finish) 
+        procB.connect(procB, 
                 QtCore.SIGNAL("readyReadStandardOutput()"),
                 self.on_bundler_out)
-        self.proc.start(command)
-       
+        procB.start(command)
+        procB.waitForStarted()
+    
     # Start cmvs
     def startcmvs(self):
-        command = self.text6.displayText()
-        self.proc.connect(self.proc,
+        if procC.state() == QProcess.Running:
+            self.kill_cmvs_process() 
+        command =  self.text6.displayText()
+        procC.connect(procC,
                 QtCore.SIGNAL("started()"),
                 self.on_cmvs_start) 
-        self.proc.connect(self.proc, 
+        procC.connect(procC, 
+                QtCore.SIGNAL("finished(int)"),
+                self.on_cmvs_finish)  
+        procC.connect(procC, 
 				QtCore.SIGNAL("readyReadStandardOutput()"),
                 self.on_cmvs_out)
-        self.proc.start(command)
- 
+        procC.start(command)
+        procC.waitForStarted()
+
     # Start pmvs
     def startpmvs(self):
+        if procP.state() == QProcess.Running:
+            self.kill_pmvs_process()
         command = self.text8.displayText()
-        self.proc.connect(self.proc,
+        procP.connect(procP,
                 QtCore.SIGNAL("started()"),
                 self.on_pmvs_start) 
-        self.proc.connect(self.proc, 
+        procP.connect(procP, 
+                QtCore.SIGNAL("finished(int)"),
+                self.on_pmvs_finish) 
+        procP.connect(procP, 
 				QtCore.SIGNAL("readyReadStandardOutput()"),
                 self.on_pmvs_out)
-        self.proc.start(command)
+        procP.start(command)
+        procP.waitForStarted()
  
     # select directory with photos (Camera Database)
     def showDialog4(self):
@@ -549,5 +674,21 @@ class PPTGUI(QtGui.QWidget):
 
 # start Camera Database
     def startcamdat(self):
+        if procCam.state() == QProcess.Running:
+            self.kill_cam_process()
         command = self.text10.displayText()
-        subprocess.Popen((str(command)), shell=True)
+        procCam.connect(procCam,
+                QtCore.SIGNAL("started()"),
+                self.on_cam_start) 
+        procCam.connect(procCam, 
+                QtCore.SIGNAL("finished(int)"),
+                self.on_cam_finish) 
+        procCam.connect(procP, 
+				QtCore.SIGNAL("readyReadStandardOutput()"),
+                self.on_cam_out)
+        procCam.start(command)
+        procCam.waitForStarted()
+
+        
+
+

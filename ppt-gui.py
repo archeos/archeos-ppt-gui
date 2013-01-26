@@ -1,15 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys
+import sys, signal
 
 from gui.main import PPTGUI
 
 from PyQt4 import QtGui
 
-if __name__ == '__main__':
-
+def main():
+    """The Main Loop !"""
     app = QtGui.QApplication(sys.argv)
     ppt = PPTGUI()
     ppt.show()
-    app.exec_()
+    sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal.SIG_DFL) 
+    main()
