@@ -17,13 +17,14 @@ procP.setProcessChannelMode(QProcess.MergedChannels)
 procCam = QProcess()
 procCam.setProcessChannelMode(QProcess.MergedChannels)
 
-class CameraDialog(QDialog):
+class CameraDialog(QWidget):
     """Simple Dialog to handle the camera database
     input
     """
     def __init__(self, parent, ):
         """docstring for __init__"""
-        pass
+        super(PPTGUI, self).__init__()
+
 
 class PPTGUI(QWidget):
     """ The main Widget
