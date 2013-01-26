@@ -1,4 +1,6 @@
-# vim
+# gedit
 *~
+#vim
+*.swp
 # Python
 *.pyc

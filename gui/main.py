@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
+import os
+
 from PyQt4 import QtGui
 from PyQt4.QtGui import QWidget, QInputDialog
 from PyQt4 import QtCore
 from PyQt4.QtCore import QProcess
+
+
 
 #Global processes to avoid weird behaviors (sic)
 procB = QProcess()
@@ -29,12 +33,22 @@ class PPTGUI(QWidget):
         - BUT ALSO QProcess slots ? 
     """
     def __init__(self):
+        # Icons
+        self.py_icon = QtGui.QIcon(
+            os.path.join(os.path.dirname(os.path.abspath(__file__)),
+            'assets/icons/python_icon.png')
+        )
+        self.help_icon = QtGui.QIcon(
+            os.path.join(os.path.dirname(os.path.abspath(__file__)),
+            'assets/icons/info_icon.png')
+        )
+
         super(PPTGUI, self).__init__()
         ####################################################################    
         self.setWindowTitle('Python Photogrammetry Toolbox GUI v. 0.1')
         self.setGeometry(300, 300, 900, 580)
-        self.setWindowIcon(QtGui.QIcon('gui/assets/icons/python_icon.png'))
-          ####################################################################       
+        self.setWindowIcon(self.py_icon)
+####################################################################
         self.tabWidget = QtGui.QTabWidget(self)
         self.tabWidget.setGeometry(QtCore.QRect(0, 0, 900, 580))
         self.tabWidget.setObjectName("tabWidget")
@@ -76,7 +90,7 @@ class PPTGUI(QWidget):
 
         # help button select directory
         self.help_button1 = QtGui.QPushButton("", self.tab)
-        self.help_button1.setIcon(QtGui.QIcon('gui/assets/icons/info_icon.png'))
+        self.help_button1.setIcon(self.help_icon)
         self.help_button1.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button1.move(800, 26)
         self.connect(self.help_button1, QtCore.SIGNAL('clicked()'), self.on_help1_clicked)
@@ -99,7 +113,7 @@ class PPTGUI(QWidget):
 
         # help button features extractor
         self.help_button2 = QtGui.QPushButton("", self.tab)
-        self.help_button2.setIcon(QtGui.QIcon('gui/assets/icons/info_icon.png'))
+        self.help_button2.setIcon(self.help_icon)
         self.help_button2.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button2.move(300, 76)
         self.connect(self.help_button2, QtCore.SIGNAL('clicked()'), self.on_help2_clicked)
@@ -118,7 +132,7 @@ class PPTGUI(QWidget):
 
         # help button width
         self.help_button3 = QtGui.QPushButton("", self.tab)
-        self.help_button3.setIcon(QtGui.QIcon('gui/assets/icons/info_icon.png'))
+        self.help_button3.setIcon(self.help_icon)
         self.help_button3.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button3.move(720, 76)
         self.connect(self.help_button3, QtCore.SIGNAL('clicked()'), self.on_help3_clicked)
@@ -148,7 +162,7 @@ class PPTGUI(QWidget):
 
         # help button resize
         self.help_button4 = QtGui.QPushButton("", self.tab)
-        self.help_button4.setIcon(QtGui.QIcon('gui/assets/icons/info_icon.png'))
+        self.help_button4.setIcon(self.help_icon)
         self.help_button4.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button4.move(720, 126)
         self.connect(self.help_button4, QtCore.SIGNAL('clicked()'), self.on_help4_clicked)
@@ -156,7 +170,7 @@ class PPTGUI(QWidget):
 
         # button 4 for start bundler 
         self.button4 = QtGui.QPushButton('Run', self.tab)
-        self.button4.setIcon(QtGui.QIcon('gui/assets/icons/python_icon.png'))
+        self.button4.setIcon(self.py_icon)
         self.button4.move(20, 180)
         self.connect(self.button4, QtCore.SIGNAL('clicked()'), self.startbundler)
 
@@ -205,7 +219,7 @@ class PPTGUI(QWidget):
 
         # help button 5 select bundler output directory
         self.help_button5 = QtGui.QPushButton("", self.tab_3)
-        self.help_button5.setIcon(QtGui.QIcon('gui/assets/icons/info_icon.png'))
+        self.help_button5.setIcon(self.help_icon)
         self.help_button5.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button5.move(800, 26)
         self.connect(self.help_button5, QtCore.SIGNAL('clicked()'), self.on_help5_clicked)
@@ -221,7 +235,7 @@ class PPTGUI(QWidget):
 
         # help button 6 select bundler output directory
         self.help_button6 = QtGui.QPushButton("", self.tab_3)
-        self.help_button6.setIcon(QtGui.QIcon('gui/assets/icons/info_icon.png'))
+        self.help_button6.setIcon(self.help_icon)
         self.help_button6.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button6.move(580, 79)
         self.connect(self.help_button6, QtCore.SIGNAL('clicked()'), self.on_help6_clicked)
@@ -229,7 +243,7 @@ class PPTGUI(QWidget):
 
         # button run CMVS
         self.button5 = QtGui.QPushButton('Run', self.tab_3)
-        self.button5.setIcon(QtGui.QIcon('gui/assets/icons/python_icon.png'))
+        self.button5.setIcon(self.help_icon)
         self.button5.move(20, 130)
         self.connect(self.button5, QtCore.SIGNAL('clicked()'), self.startcmvs)
 
@@ -285,7 +299,7 @@ class PPTGUI(QWidget):
 
         # help button 7 select bundler output directory
         self.help_button7 = QtGui.QPushButton("", self.tab_2)
-        self.help_button7.setIcon(QtGui.QIcon('gui/assets/icons/info_icon.png'))
+        self.help_button7.setIcon(self.help_icon)
         self.help_button7.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button7.move(800, 76)
         self.help_button7.hide()
@@ -294,7 +308,7 @@ class PPTGUI(QWidget):
 
         # run PMVS
         self.button6 = QtGui.QPushButton('Run', self.tab_2)
-        self.button6.setIcon(QtGui.QIcon('gui/assets/icons/python_icon.png'))
+        self.button6.setIcon(self.py_icon)
         self.button6.move(20, 130)
         self.button6.hide()
         self.connect(self.button6, QtCore.SIGNAL('clicked()'), self.startpmvs)
@@ -342,7 +356,7 @@ class PPTGUI(QWidget):
         
         # help button select directory
         self.help_button9 = QtGui.QPushButton("", self.tab_4)
-        self.help_button9.setIcon(QtGui.QIcon('gui/assets/icons/info_icon.png'))
+        self.help_button9.setIcon(self.help_icon)
         self.help_button9.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button9.move(800, 26)
         self.connect(self.help_button9, QtCore.SIGNAL('clicked()'), self.on_help9_clicked)
@@ -350,7 +364,7 @@ class PPTGUI(QWidget):
         
         # button run Camera Database
         self.button10 = QtGui.QPushButton('Run', self.tab_4)
-        self.button10.setIcon(QtGui.QIcon('gui/assets/icons/python_icon.png'))
+        self.button10.setIcon(self.py_icon)
         self.button10.move(20, 80)
         self.connect(self.button10, QtCore.SIGNAL('clicked()'), self.startcamdat)
 
