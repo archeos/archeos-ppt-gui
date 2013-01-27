@@ -1,11 +1,13 @@
 ppt-gui (0.1+nmu1) theodoric; urgency=low
   * Non-maintainer upload 
   * Initial theodoric release
+  * Last update before complete refactoring 
   * Converted to 3.0 (native) source package
   * (hopefully) Better organisation of code
-  * Added a short distutils file (setup.py)
+  * Tighter integration with ppt
+  * Added a small distutils file (setup.py)
 
- -- Romain Janvier <romain.janvier@hotmail.com>  Tue, 22 Jan 2013 12:05:31 +0100
+ -- Romain Janvier <romain.janvier@hotmail.fr>  Tue, 22 Jan 2013 12:05:31 +0100
 
 ppt-gui (0.1-0archeos5) caesar; urgency=low
   

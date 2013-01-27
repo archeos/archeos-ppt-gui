@@ -1,7 +1,7 @@
 Source: ppt-gui
 Maintainer: Alessendro Bezzi <alessandro.bezzi@arcteam.com>
 uploaders: Luca Bezzi <luca.bezzi@arcteam.com>, Romain Janvier <romain.janvier@hotmail.fr> 
-Section: photogrammetry
+Section: python
 Priority: optional
 Standards-Version: 3.9.4
 Build-Depends: python, debhelper (>= 9.0.0)
@@ -15,7 +15,6 @@ Package: ppt-gui
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, ppt (>= 0.1), python-qt4 (>=4.9.3)
 Description: Simple GUI on top of Python Photogrammetry Toolbox
- This gui helps you to run Bundler, CMVS, PMVS in a graphic
- environment. It's based on Python and PyQt4 and interacts with
- scripts of Python Photogrammetry Toolbox.
+ This GUI helps you to run Bundler, CMVS, PMVS through Python Photogrammetry 
+ Toolbox. It's based on Python 2 and PyQt4.
 
