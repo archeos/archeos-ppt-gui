@@ -248,7 +248,8 @@ class PPTGUI(QWidget):
         self.output1.resize(850, 270)
         self.output1.setAcceptRichText(True)
         self.output1.setAutoFormatting(QTextEdit.AutoBulletList)
-
+        self.scroll1 = self.output1.verticalScrollBar()
+ 
 
         # CMVS/PMVS     
         # button 2 for Bundler output directory
@@ -335,7 +336,9 @@ class PPTGUI(QWidget):
         self.output2.resize(850, 270)
         self.output2.setAcceptRichText(True)
         self.output2.setAutoFormatting(QTextEdit.AutoBulletList)
-
+        self.scroll2 = self.output2.verticalScrollBar()
+ 
+ 
         # run only PMVS
         self.cb3 = QCheckBox(
                 'Use directly PMVS2 (without CMVS):', 
@@ -416,6 +419,7 @@ class PPTGUI(QWidget):
         self.output3.resize(850, 270)
         self.output3.setAcceptRichText(True)
         self.output3.setAutoFormatting(QTextEdit.AutoBulletList)
+        self.scroll3 = self.output3.verticalScrollBar()
         
 
         # CAMERA DATABASE      
@@ -478,7 +482,8 @@ class PPTGUI(QWidget):
         self.output4.resize(850, 270)
         self.output4.setAcceptRichText(True)
         self.output4.setAutoFormatting(QTextEdit.AutoBulletList)
-	
+        self.scroll4 = self.output4.verticalScrollBar()
+ 
 
     # select directory with photos
     def showDialog1(self):
@@ -621,7 +626,7 @@ class PPTGUI(QWidget):
                 " --maxPhotoDimension=" + 
                 self.text13.displayText())
 
-# connection size-command
+    # connection size-command
     def onChangedsize(self, text):
         self.cb1.setChecked(False)
         self.cb2.setChecked(True)
@@ -738,16 +743,19 @@ class PPTGUI(QWidget):
         self.output4.insertHtml("<h4>Process has started...</h4><br>")
  
     def on_bundler_out(self):
-         self.output1.insertHtml(
+        self.output1.insertHtml(
                  self.format_out(procB.readAllStandardOutput()))
+        self.scroll1.setValue(self.scroll1.maximum())
 
     def on_cmvs_out(self):
         self.output2.insertHtml(
                 self.format_out(procC.readAllStandardOutput()))
+        self.scroll2.setValue(self.scroll2.maximum())
 
     def on_pmvs_out(self):
         self.output3.insertHtml(
                 self.format_out(procP.readAllStandardOutput()))
+        self.scroll3.setValue(self.scroll3.maximum())
 
     def on_cam_out(self):
         out = unicode(procCam.readAllStandardOutput())
@@ -762,7 +770,9 @@ class PPTGUI(QWidget):
            procCam.write(arg)
         else:
             self.output4.insertHtml(self.format_out(out))
- 
+            self.scroll4.setValue(self.scroll4.maximum())
+
+
     def on_bundler_finish(self, status):
         self.output1.insertHtml("<h4>Process is finished!</h4><br><br>")
 
