@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from PyQt4 import QtGui
-from PyQt4.QtGui import QWidget, QInputDialog
+from PyQt4.QtGui import * 
 from PyQt4 import QtCore
 from PyQt4.QtCore import QProcess
 
@@ -11,7 +10,7 @@ from PyQt4.QtCore import QProcess
 
 - I also use an interleave stdout and stderr (MergedChannels). 
 we need to do that because CMVS write some output in stderr (?). 
-So, a proper error handling is impossible.
+So, a proper error handling in a separate channel is impossible.
 """
 procB = QProcess()
 procB.setProcessChannelMode(QProcess.MergedChannels)
@@ -31,11 +30,11 @@ class PPTGUI(QWidget):
 
     def __init__(self):
         # Icons
-        self.py_icon = QtGui.QIcon(
+        self.py_icon = QIcon(
             os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
                                'assets/icons/python_icon.png'))      
-        self.help_icon = QtGui.QIcon(
+        self.help_icon = QIcon(
             os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
                                 'assets/icons/info_icon.png'))
@@ -46,56 +45,56 @@ class PPTGUI(QWidget):
         self.setGeometry(300, 300, 900, 580)
         self.setWindowIcon(self.py_icon)
         #############################################################
-        self.tabWidget = QtGui.QTabWidget(self)
+        self.tabWidget = QTabWidget(self)
         self.tabWidget.setGeometry(QtCore.QRect(0, 0, 900, 580))
         self.tabWidget.setObjectName("tabWidget")
-        self.tab = QtGui.QWidget()
+        self.tab = QWidget()
         self.tab.setObjectName("tab")
         self.tabWidget.addTab(self.tab, "")
-        self.tab_3 = QtGui.QWidget()
+        self.tab_3 = QWidget()
         self.tab_3.setObjectName("tab_3")
         self.tabWidget.addTab(self.tab_3, "")
-        self.tab_2 = QtGui.QWidget()
+        self.tab_2 = QWidget()
         self.tab_2.setObjectName("tab_2")
         self.tabWidget.addTab(self.tab_2, "")
-        self.tab_4 = QtGui.QWidget()
+        self.tab_4 = QWidget()
         self.tab_4.setObjectName("tab_4")
         self.tabWidget.addTab(self.tab_4, "")
         self.initUI()
         # tabWidgets
         self.tabWidget.setTabText(
                 self.tabWidget.indexOf(self.tab), 
-                QtGui.QApplication.translate(
+                QApplication.translate(
                     "MainWindow",
                     "1. Run Bundler",
                     None, 
-                    QtGui.QApplication.UnicodeUTF8))
+                    QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(
                 self.tabWidget.indexOf(self.tab_3), 
-                QtGui.QApplication.translate(
+                QApplication.translate(
                     "MainWindow",
                     "2. Run CMVS/PMVS", 
                     None, 
-                    QtGui.QApplication.UnicodeUTF8))
+                    QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(
                 self.tabWidget.indexOf(self.tab_2), 
-                QtGui.QApplication.translate(
+                QApplication.translate(
                     "MainWindow",
                     "or run PMVS without CMVS",
                     None, 
-                    QtGui.QApplication.UnicodeUTF8))
+                    QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(
                 self.tabWidget.indexOf(self.tab_4), 
-                QtGui.QApplication.translate("MainWindow",
+                QApplication.translate("MainWindow",
                     "Check Camera Database", 
                     None,
-                    QtGui.QApplication.UnicodeUTF8))
+                    QApplication.UnicodeUTF8))
 
     def initUI(self):
         """ Init GUI"""
         # BUNDLER
         # button 1 for pictures directory 
-        self.button1 = QtGui.QPushButton('Select Photos Path', self.tab)
+        self.button1 = QPushButton('Select Photos Path', self.tab)
         self.button1.setFocusPolicy(QtCore.Qt.NoFocus)
         self.button1.move(20, 30)
         self.connect(self.button1,
@@ -104,14 +103,14 @@ class PPTGUI(QWidget):
         self.setFocus()
         
         # directory path label
-        self.label9 = QtGui.QLabel('path:', self.tab)
+        self.label9 = QLabel('path:', self.tab)
         self.label9.move(190, 34)
-        self.text4 = QtGui.QLineEdit(self.tab)
+        self.text4 = QLineEdit(self.tab)
         self.text4.move(235, 30)
         self.text4.resize(550, 27)
         
         # help button select directory
-        self.help_button1 = QtGui.QPushButton("", self.tab)
+        self.help_button1 = QPushButton("", self.tab)
         self.help_button1.setIcon(self.help_icon)
         self.help_button1.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button1.move(800, 26)
@@ -122,11 +121,11 @@ class PPTGUI(QWidget):
         self.setFocus()
         
         # features extractor combo
-        self.label16 = QtGui.QLabel('Select Feature Extractor:', self.tab)
+        self.label16 = QLabel('Select Feature Extractor:', self.tab)
         self.label16.move(20, 84)
-        self.text15 = QtGui.QLineEdit("siftvlfeat", self.tab)
+        self.text15 = QLineEdit("siftvlfeat", self.tab)
         self.text15.setReadOnly(True)
-        self.combo = QtGui.QComboBox(self.tab)
+        self.combo = QComboBox(self.tab)
         self.combo.addItem("siftvlfeat")
         self.combo.addItem("siftlowe")
         self.combo.move(200, 80)
@@ -138,7 +137,7 @@ class PPTGUI(QWidget):
                 self.onActivated)
         
         # help button features extractor
-        self.help_button2 = QtGui.QPushButton("", self.tab)
+        self.help_button2 = QPushButton("", self.tab)
         self.help_button2.setIcon(self.help_icon)
         self.help_button2.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button2.move(300, 76)
@@ -148,7 +147,7 @@ class PPTGUI(QWidget):
         self.setFocus()
         
         # image width
-        self.cb1 = QtGui.QCheckBox('Set desired Photos Width:', self.tab)
+        self.cb1 = QCheckBox('Set desired Photos Width:', self.tab)
         self.cb1.setFocusPolicy(QtCore.Qt.NoFocus)
         self.cb1.move(380, 80)
         self.cb1.toggle()
@@ -156,12 +155,12 @@ class PPTGUI(QWidget):
                 self.cb1,
                 QtCore.SIGNAL('stateChanged(int)'),
                 self.changesize1)
-        self.text13 = QtGui.QLineEdit('1200', self.tab)
+        self.text13 = QLineEdit('1200', self.tab)
         self.text13.move(600, 78)
         self.text13.resize(70, 27)
         
         # help button width
-        self.help_button3 = QtGui.QPushButton("", self.tab)
+        self.help_button3 = QPushButton("", self.tab)
         self.help_button3.setIcon(self.help_icon)
         self.help_button3.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button3.move(720, 76)
@@ -171,7 +170,7 @@ class PPTGUI(QWidget):
         self.setFocus()
 
         # image resize
-        self.cb2 = QtGui.QCheckBox(
+        self.cb2 = QCheckBox(
                 'Scale Photos with a Scaling Factor',
                 self.tab)
         self.cb2.setFocusPolicy(QtCore.Qt.NoFocus)
@@ -182,9 +181,9 @@ class PPTGUI(QWidget):
                 self.cb2,
                 QtCore.SIGNAL('stateChanged(int)'),
                 self.changesize2)
-        self.text11 = QtGui.QLineEdit("1", self.tab)
+        self.text11 = QLineEdit("1", self.tab)
         self.text11.setReadOnly(True)
-        self.combo2 = QtGui.QComboBox(self.tab)
+        self.combo2 = QComboBox(self.tab)
         self.combo2.hide()
         self.combo2.addItem("1")
         self.combo2.addItem("0.75")
@@ -199,7 +198,7 @@ class PPTGUI(QWidget):
                 self.onActivated2)
 
         # help button resize
-        self.help_button4 = QtGui.QPushButton("", self.tab)
+        self.help_button4 = QPushButton("", self.tab)
         self.help_button4.setIcon(self.help_icon)
         self.help_button4.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button4.move(720, 126)
@@ -210,14 +209,14 @@ class PPTGUI(QWidget):
         self.setFocus()
 
         # button 4 for start bundler 
-        self.button4 = QtGui.QPushButton('Run', self.tab)
+        self.button4 = QPushButton('Run', self.tab)
         self.button4.setIcon(self.py_icon)
         self.button4.move(20, 180)
         self.connect(
                 self.button4,
                 QtCore.SIGNAL('clicked()'),
                 self.startbundler)
-        self.text2 = QtGui.QLineEdit(self.tab)
+        self.text2 = QLineEdit(self.tab)
         self.text2.move(120, 184)
         self.text2.setReadOnly(True)
         self.text2.resize(760, 27)
@@ -237,23 +236,23 @@ class PPTGUI(QWidget):
                 self.onChangedsize)
 
         # output
-        self.line1 = QtGui.QFrame(self.tab)
+        self.line1 = QFrame(self.tab)
         self.line1.setGeometry(QtCore.QRect(10, 220, 880, 20))
-        self.line1.setFrameShape(QtGui.QFrame.HLine)
-        self.line1.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line1.setFrameShape(QFrame.HLine)
+        self.line1.setFrameShadow(QFrame.Sunken)
         self.line1.setObjectName("line1")
-        self.label20 = QtGui.QLabel('Output Bundler:', self.tab)
+        self.label20 = QLabel('Output Bundler:', self.tab)
         self.label20.move(20, 240)
-        self.output1 = QtGui.QTextBrowser(self.tab)
+        self.output1 = QTextBrowser(self.tab)
         self.output1.move(20, 264)
         self.output1.resize(850, 270)
         self.output1.setAcceptRichText(True)
-        self.output1.setAutoFormatting(QtGui.QTextEdit.AutoBulletList)
+        self.output1.setAutoFormatting(QTextEdit.AutoBulletList)
 
 
         # CMVS/PMVS     
         # button 2 for Bundler output directory
-        self.button2 = QtGui.QPushButton(
+        self.button2 = QPushButton(
                 'Select Bundler Output Path',
                 self.tab_3)
         self.button2.setFocusPolicy(QtCore.Qt.NoFocus)
@@ -265,14 +264,14 @@ class PPTGUI(QWidget):
         self.setFocus()
 
         # directory output path label
-        self.label10 = QtGui.QLabel('path:', self.tab_3)
+        self.label10 = QLabel('path:', self.tab_3)
         self.label10.move(240, 34)
-        self.text3 = QtGui.QLineEdit(self.tab_3)
+        self.text3 = QLineEdit(self.tab_3)
         self.text3.move(285, 30)
         self.text3.resize(500, 27)
 
         # help button 5 select bundler output directory
-        self.help_button5 = QtGui.QPushButton("", self.tab_3)
+        self.help_button5 = QPushButton("", self.tab_3)
         self.help_button5.setIcon(self.help_icon)
         self.help_button5.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button5.move(800, 26)
@@ -283,16 +282,16 @@ class PPTGUI(QWidget):
         self.setFocus()
 
         # number images for cluster
-        self.label11 = QtGui.QLabel(
+        self.label11 = QLabel(
                 'Number of Photos in each Cluster:',
                 self.tab_3)
         self.label11.move(240, 84)
-        self.text5 = QtGui.QLineEdit('10', self.tab_3)
+        self.text5 = QLineEdit('10', self.tab_3)
         self.text5.move(490, 82)
         self.text5.resize(70, 27)
 
         # help button 6 select bundler output directory
-        self.help_button6 = QtGui.QPushButton("", self.tab_3)
+        self.help_button6 = QPushButton("", self.tab_3)
         self.help_button6.setIcon(self.help_icon)
         self.help_button6.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button6.move(580, 79)
@@ -303,14 +302,14 @@ class PPTGUI(QWidget):
         self.setFocus()
 
         # button run CMVS
-        self.button5 = QtGui.QPushButton('Run', self.tab_3)
+        self.button5 = QPushButton('Run', self.tab_3)
         self.button5.setIcon(self.py_icon)
         self.button5.move(20, 130)
         self.connect(
                 self.button5,
                 QtCore.SIGNAL('clicked()'), 
                 self.startcmvs)
-        self.text6 = QtGui.QLineEdit(self.tab_3)
+        self.text6 = QLineEdit(self.tab_3)
         self.text6.move(120, 134)
         self.text6.setReadOnly(True)
         self.text6.resize(760, 27)
@@ -324,21 +323,21 @@ class PPTGUI(QWidget):
                 self.onChangedcluster)
 
         # output
-        self.line3 = QtGui.QFrame(self.tab_3)
+        self.line3 = QFrame(self.tab_3)
         self.line3.setGeometry(QtCore.QRect(10, 220, 880, 20))
-        self.line3.setFrameShape(QtGui.QFrame.HLine)
-        self.line3.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line3.setFrameShape(QFrame.HLine)
+        self.line3.setFrameShadow(QFrame.Sunken)
         self.line3.setObjectName("line3")
-        self.label21 = QtGui.QLabel('Output CMVS/PMVS:', self.tab_3)
+        self.label21 = QLabel('Output CMVS/PMVS:', self.tab_3)
         self.label21.move(20, 240)
-        self.output2 = QtGui.QTextBrowser(self.tab_3)
+        self.output2 = QTextBrowser(self.tab_3)
         self.output2.move(20, 264)
         self.output2.resize(850, 270)
         self.output2.setAcceptRichText(True)
-        self.output2.setAutoFormatting(QtGui.QTextEdit.AutoBulletList)
+        self.output2.setAutoFormatting(QTextEdit.AutoBulletList)
 
         # run only PMVS
-        self.cb3 = QtGui.QCheckBox(
+        self.cb3 = QCheckBox(
                 'Use directly PMVS2 (without CMVS):', 
                 self.tab_2)
         self.cb3.setFocusPolicy(QtCore.Qt.NoFocus)
@@ -351,7 +350,7 @@ class PPTGUI(QWidget):
                 self.openpmvs)
 
         # button 3 for output directory
-        self.button3 = QtGui.QPushButton(
+        self.button3 = QPushButton(
                 'Select Bundler Output Path',
                 self.tab_2)
         self.button3.setFocusPolicy(QtCore.Qt.NoFocus)
@@ -364,17 +363,17 @@ class PPTGUI(QWidget):
         self.setFocus()
 
         # directory output path label
-        self.label14 = QtGui.QLabel('path:', self.tab_2)
+        self.label14 = QLabel('path:', self.tab_2)
         self.label14.move(240, 84)
         self.label14.hide()
 
-        self.text7 = QtGui.QLineEdit(self.tab_2)
+        self.text7 = QLineEdit(self.tab_2)
         self.text7.move(280, 80)
         self.text7.hide()
         self.text7.resize(500, 27)
 
         # help button 7 select bundler output directory
-        self.help_button7 = QtGui.QPushButton("", self.tab_2)
+        self.help_button7 = QPushButton("", self.tab_2)
         self.help_button7.setIcon(self.help_icon)
         self.help_button7.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button7.move(800, 76)
@@ -386,7 +385,7 @@ class PPTGUI(QWidget):
         self.setFocus()
 
         # run PMVS
-        self.button6 = QtGui.QPushButton('Run', self.tab_2)
+        self.button6 = QPushButton('Run', self.tab_2)
         self.button6.setIcon(self.py_icon)
         self.button6.move(20, 130)
         self.button6.hide()
@@ -394,7 +393,7 @@ class PPTGUI(QWidget):
                 self.button6,
                 QtCore.SIGNAL('clicked()'),
                 self.startpmvs)
-        self.text8 = QtGui.QLineEdit(self.tab_2)
+        self.text8 = QLineEdit(self.tab_2)
         self.text8.move(120, 134)
         self.text8.setReadOnly(True)
         self.text8.hide()
@@ -405,23 +404,23 @@ class PPTGUI(QWidget):
                 self.onChangedpathpmvs)
 
         # output
-        self.line2 = QtGui.QFrame(self.tab_2)
+        self.line2 = QFrame(self.tab_2)
         self.line2.setGeometry(QtCore.QRect(10, 220, 880, 20))
-        self.line2.setFrameShape(QtGui.QFrame.HLine)
-        self.line2.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line2.setFrameShape(QFrame.HLine)
+        self.line2.setFrameShadow(QFrame.Sunken)
         self.line2.setObjectName("line2")
-        self.label22 = QtGui.QLabel('Output PMVS:', self.tab_2)
+        self.label22 = QLabel('Output PMVS:', self.tab_2)
         self.label22.move(20, 240)
-        self.output3 = QtGui.QTextBrowser(self.tab_2)
+        self.output3 = QTextBrowser(self.tab_2)
         self.output3.move(20, 264)
         self.output3.resize(850, 270)
         self.output3.setAcceptRichText(True)
-        self.output3.setAutoFormatting(QtGui.QTextEdit.AutoBulletList)
+        self.output3.setAutoFormatting(QTextEdit.AutoBulletList)
         
 
         # CAMERA DATABASE      
         # button 1 for pictures directory 
-        self.button8 = QtGui.QPushButton('Select Photos Path', self.tab_4)
+        self.button8 = QPushButton('Select Photos Path', self.tab_4)
         self.button8.setFocusPolicy(QtCore.Qt.NoFocus)
         self.button8.move(20, 30)
         self.connect(
@@ -431,14 +430,14 @@ class PPTGUI(QWidget):
         self.setFocus()
 
         # directory path label
-        self.label12 = QtGui.QLabel('path:', self.tab_4)
+        self.label12 = QLabel('path:', self.tab_4)
         self.label12.move(190, 34)
-        self.text9 = QtGui.QLineEdit(self.tab_4)
+        self.text9 = QLineEdit(self.tab_4)
         self.text9.move(235, 30)
         self.text9.resize(550, 27)
         
         # help button select directory
-        self.help_button9 = QtGui.QPushButton("", self.tab_4)
+        self.help_button9 = QPushButton("", self.tab_4)
         self.help_button9.setIcon(self.help_icon)
         self.help_button9.setFocusPolicy(QtCore.Qt.NoFocus)
         self.help_button9.move(800, 26)
@@ -449,14 +448,14 @@ class PPTGUI(QWidget):
         self.setFocus()
         
         # button run Camera Database
-        self.button10 = QtGui.QPushButton('Run', self.tab_4)
+        self.button10 = QPushButton('Run', self.tab_4)
         self.button10.setIcon(self.py_icon)
         self.button10.move(20, 80)
         self.connect(
                 self.button10,
                 QtCore.SIGNAL('clicked()'),
                 self.startcamdat)
-        self.text10 = QtGui.QLineEdit(self.tab_4)
+        self.text10 = QLineEdit(self.tab_4)
         self.text10.move(120, 84)
         self.text10.setReadOnly(True)
         self.text10.resize(760, 27)
@@ -465,25 +464,25 @@ class PPTGUI(QWidget):
                 self.onChangedpathcamdat)
 	
         # output
-        self.line4 = QtGui.QFrame(self.tab_4)
+        self.line4 = QFrame(self.tab_4)
         self.line4.setGeometry(QtCore.QRect(10, 220, 880, 20))
-        self.line4.setFrameShape(QtGui.QFrame.HLine)
-        self.line4.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line4.setFrameShape(QFrame.HLine)
+        self.line4.setFrameShadow(QFrame.Sunken)
         self.line4.setObjectName("line1")
-        self.label23 = QtGui.QLabel(
+        self.label23 = QLabel(
                 'Output Camera Database:', 
                 self.tab_4)
         self.label23.move(20, 240)
-        self.output4 = QtGui.QTextBrowser(self.tab_4)
+        self.output4 = QTextBrowser(self.tab_4)
         self.output4.move(20, 264)
         self.output4.resize(850, 270)
         self.output4.setAcceptRichText(True)
-        self.output4.setAutoFormatting(QtGui.QTextEdit.AutoBulletList)
+        self.output4.setAutoFormatting(QTextEdit.AutoBulletList)
 	
 
     # select directory with photos
     def showDialog1(self):
-        directoryname = QtGui.QFileDialog.getExistingDirectory(
+        directoryname = QFileDialog.getExistingDirectory(
                 self,
                 'Open directory with photos',
                 '/home')
@@ -526,16 +525,16 @@ class PPTGUI(QWidget):
 
     # help button 1 - select directory
     def on_help1_clicked(self):
-		QtGui.QMessageBox.information(
+		QMessageBox.information(
                 self, 
                 "Help!",
                 "Select the directory with original photos." + 
                 "Pictures have to be in JPG file format.", 
-                QtGui.QMessageBox.Ok)
+                QMessageBox.Ok)
 
     # help button 2 - feature extractor
     def on_help2_clicked(self):
-		QtGui.QMessageBox.information(
+		QMessageBox.information(
                 self, 
                 "Help!", 
                 "Select the feature extractor: VLFEAT or SIFT." + 
@@ -547,11 +546,11 @@ class PPTGUI(QWidget):
                 "software requires a license from the University of" + 
                 "British Columbia. Before use SIFT download and copy" + 
                 "the binary into the <software/sift-lowe> folder.", 
-                QtGui.QMessageBox.Ok)
+                QMessageBox.Ok)
 
     # help button 3 - feature extractor
     def on_help3_clicked(self):
-		QtGui.QMessageBox.information(
+		QMessageBox.information(
                 self,
                 "Help!",
                 "Copy of a photo will be scaled down if either width or" +
@@ -560,17 +559,17 @@ class PPTGUI(QWidget):
                 "equal to the value insert in <maxPhotoDimension>." +
                 "\n\nDefault value is 1200: an image of 3008x2000 px" + 
                 "will be scale into a copy of 1200x798 px.",
-                QtGui.QMessageBox.Ok)
+                QMessageBox.Ok)
 
     # help button 4 - feature extractor
     def on_help4_clicked(self):
-		QtGui.QMessageBox.information(self,
+		QMessageBox.information(self,
                 "Help!",
                 "Scale all photos to the specified scaling factor:" + 
                 "\n\n 1 = original size \n\n 0.75 = 75% of" + 
                 "the original size \n\n 0.5 = half size" + 
                 "\n\n 0.25 = 25% of the original size.",
-                QtGui.QMessageBox.Ok)
+                QMessageBox.Ok)
 
     # connection path-command
     def onChangedpathbundler(self, text):
@@ -636,7 +635,7 @@ class PPTGUI(QWidget):
 
     # select directory with photos
     def showDialog2(self):
-        directoryname = QtGui.QFileDialog.getExistingDirectory(
+        directoryname = QFileDialog.getExistingDirectory(
                 self,
                 'Open directory with Bundler output files.',
                 '/home')
@@ -644,11 +643,11 @@ class PPTGUI(QWidget):
 
     # help button 5 - select directory
     def on_help5_clicked(self):
-		QtGui.QMessageBox.information(
+		QMessageBox.information(
                 self, 
                 "Help!", 
                 "Select the Bundler output directory.", 
-                QtGui.QMessageBox.Ok)
+                QMessageBox.Ok)
 
     # connection path-command
     def onChangedpathcmvs(self, text):
@@ -668,7 +667,7 @@ class PPTGUI(QWidget):
 
     # help button 6 - cluster
     def on_help6_clicked(self):
-		QtGui.QMessageBox.information(
+		QMessageBox.information(
                 self,
                 "Help!",
                 "Select the max number of photos for each cluster that" + 
@@ -678,7 +677,7 @@ class PPTGUI(QWidget):
                 "different value. \n\n - Default value is 10: an image" +
                 "set with 28 photos will be compute in 3 separated" + 
                 "clusters.",
-                QtGui.QMessageBox.Ok)
+                QMessageBox.Ok)
        
     # open pmvs 
     def openpmvs(self, text):      
@@ -699,7 +698,7 @@ class PPTGUI(QWidget):
     
     # select directory with bundler output
     def showDialog3(self):
-        directoryname = QtGui.QFileDialog.getExistingDirectory(
+        directoryname = QFileDialog.getExistingDirectory(
                 self,
                 'Open directory with Bundler output files',
                 '/home')
@@ -899,7 +898,7 @@ class PPTGUI(QWidget):
  
     # select directory with photos (Camera Database)
     def showDialog4(self):
-        directoryname = QtGui.QFileDialog.getExistingDirectory(
+        directoryname = QFileDialog.getExistingDirectory(
                 self,
                 'Open directory with photos',
                 '/home')
@@ -907,14 +906,14 @@ class PPTGUI(QWidget):
         
 # help button 9 - select directory
     def on_help9_clicked(self):
-		QtGui.QMessageBox.information(self,
+		QMessageBox.information(self,
                 "Help!",
                 "Select the directory with original photos. Pictures" + 
                 "have to be in JPG file format.\n\n - Press the RUN" + 
                 "button to check if the camera is already inside the" +
                 "database.\n\n - If the camera is not correctly" + 
                 "saved, please insert in the windows the CCD width in mm", 
-                QtGui.QMessageBox.Ok)
+                QMessageBox.Ok)
 
 # connection path-command
     def onChangedpathcamdat(self, text):
