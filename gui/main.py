@@ -753,7 +753,7 @@ class PPTGUI(QWidget):
     def on_cam_out(self):
         out = unicode(procCam.readAllStandardOutput())
         if out.startswith("Type CCD width"):
-           label = out.split(".")[0]
+           label = out.split(". Press")[0]
            ccd = list(
                    QInputDialog.getDouble (self, 
                        "CCD width", label, 
