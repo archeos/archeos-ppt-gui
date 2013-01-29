@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys, signal
+import sys
+import signal
+
+from PyQt4 import QtGui
 
 from gui.main import PPTGUI
 
-from PyQt4 import QtGui
 
 def main():
     """The Main Loop !"""
@@ -15,5 +17,5 @@ def main():
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
-    signal.signal(signal.SIGINT, signal.SIG_DFL) 
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     main()
