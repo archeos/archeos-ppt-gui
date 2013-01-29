@@ -1,7 +1,7 @@
 Source: ppt-gui
 Maintainer: Alessendro Bezzi <alessandro.bezzi@arcteam.com>
 uploaders: Luca Bezzi <luca.bezzi@arcteam.com>, Romain Janvier <romain.janvier@hotmail.fr> 
-Section: python
+Section: contrib/python
 Priority: optional
 Standards-Version: 3.9.4
 Build-Depends: python, debhelper (>= 9.0.0)
@@ -17,4 +17,7 @@ Depends: ${misc:Depends}, ${python:Depends}, ppt (>= 0.1), python-qt4 (>=4.9.3)
 Description: Simple GUI on top of Python Photogrammetry Toolbox
  This GUI helps you to run Bundler, CMVS, PMVS through Python Photogrammetry 
  Toolbox. It's based on Python 2 and PyQt4.
+ .
+ PLEASE NOTE that this package depends on a free implementation of the SIFT
+ algorithm which is patented and must not be used for commercial purpose.
 
