@@ -18,6 +18,7 @@ Description: Simple GUI on top of Python Photogrammetry Toolbox
  This GUI helps you to run Bundler, CMVS, PMVS through Python Photogrammetry 
  Toolbox. It's based on Python 2 and PyQt4.
  .
- PLEASE NOTE that this package depends on a free implementation of the SIFT
- algorithm which is patented and must not be used for commercial purpose.
+ PLEASE NOTE that this package depends on PPT which use a free implementation 
+ of the SIFT algorithm (VLFeat). This algorithm is patented and must not 
+ be used for commercial purpose.
 
